@@ -1,0 +1,277 @@
+#vector 실습
+1:20
+c(1:20,'haha') #문자형 넣어주면 모두 문자형으로 바뀜 백터는 하나의 형태
+c(1:20,3,5,7)
+seq(2, 10)
+seq(from=2, to = 19, by = 2)
+rep(1:5, times = 5)
+rep(1:3, each=3)
+?rep
+rep(1:5, times = 3, each = 2)
+x<-c("1",2,"3")
+as.numeric(x)
+x <- c(1,2,3,4)
+y <- c(3,5)
+union(x,y) #합집합
+intersect(x,y) #교집합
+setdiff(x,y)#차집합
+
+
+#Matrix 실습
+x <- matrix(1:12,nrow= 3, ncol = 4) #기본적으로 열단위로 계산함
+x
+x <- matrix(1:12,nrow= 3, ncol = 4,byrow =T) #행으로 바꿔주기
+x
+?matrix
+
+colnames(x) <-c('a','b','c','d')
+x
+
+mode(x)
+class(x)
+
+apply(x, 1, max) #행단위
+apply(x, 2, max) #열단위
+c(max(x[,1]), max(x[,2]), max(x[,3]))
+
+
+
+#Array 실습
+arr <- array(1:12,c(3,2,2))
+arr
+arr <- array(1:12,c(3,2,3)) #숫자가  안맞으면 앞에꺼 반복
+arr #에러가 나진 않는다
+
+arr[,,1]
+arr[1,,]
+?array
+
+mode(arr)
+class(arr)
+class(arr[,,1]) #메트릭스가 합쳐진게 어레이 
+
+
+#List 실습
+list <- list("lee","정철희",c(1,2,3),matrix(3,2,2))
+list
+class(list[1])
+mode(list[2])
+mode(list[3])
+list[[3]][2] #vector 중 2번째 찾을 수 있다
+list[3]
+?list
+list[4]
+unlist#벡터로 변경함
+member <- list(name = c("lee","kim"),age=c(22,25),address=c('서울','부산'))
+member
+member[[1]]
+member[[2]]
+member[[3]]
+
+
+member$name
+member$age
+member$address
+
+a <- list(c(1:5),c(6:10))
+a[1]
+a[2]
+
+lapply(a,max)
+lapply(a,mean)
+lapply(a,min)
+
+sapply(a,max)
+unlist(lapply(a,max))
+
+#Data Frame 실습
+#(1) Vector 이용
+
+no <- c(1,2,3)
+name <- c('lee','kim','park')
+score <- c(100,80,90)
+df <- data.frame(no,name,score)
+df <- data.frame(No=no,Name=name,Score=score)
+df
+class(df)
+mode(df) #자료형이 전부 다르기 떄문에 list로 보여줌 (정확하지 않음)
+mode(df$No)
+mode(df$Name)
+mode(df$Score)
+
+#접근방법 3가지
+df$No
+df$Name
+df$Score
+
+df
+df[[1]]
+df[[2]]
+df[[3]] #컬럼별로 list가 들어간 느낌 이렇게 접근은 잘사용하지 않음
+df
+df[2,3]
+df[2,2]
+df[,3]
+
+#(2) Matrix 이용
+m <- matrix(c("1","kim", 100,
+              "2", "lee", 90,"3","jung","1000"), nrow=3,byrow =T)
+m
+df1 <- data.frame(m)
+df1
+
+#Matrix로 받으면 각각의 컬럼이 전부 문자로 들어감(데이터 type이 전부 문자)
+
+
+#(3) emp.txt 이용
+getwd()
+setwd("C:/Users/USER/Desktop/전산통계1") #\ 를 / or \\ 로 바꿔라
+df2 <- read.table('emp.txt')
+df2
+df2 <- read.table('emp.txt',header = T)  #첫번쨰를 컬럼 이름으로 넣기
+class(df2)
+df2$no
+df2$name
+df2$pay
+
+mode(df2$no)
+mode(df2$name)
+mode(df2$pay)
+
+#객체처리함수
+df<-data.frame(x=c(1:5),y=seq(2,10,2),z=c('a','b','c','d','e'))
+df
+apply(df,2,summary)
+str(df)
+summary(df)
+x1<-subset(df,x>=3 &y>6 &z=="d")
+x1
+
+height<-data.frame(id=c(1,2,3),h=c(180,175,155))
+weight<-data.frame(id=c(1,2),w=c(80,75))
+
+
+#연습#
+is.numeric(int)
+is.character(string)
+is.logical(boolean)
+is.na(NA)
+is.nan(0/0)
+1:20
+c(1:20)
+rep(1:3,each=3)
+m<-matrix(c(1:9),nrow=3)
+m
+colnames(m)<-c("one","two","three")
+rownames(m)<-c(1,2,3)
+m
+mode(m)
+class(m)
+apply(m,1,max)
+apply(m,2,max)
+f<-function(x){x*c(1,2,3)}
+result<-apply(m,1,f)
+result
+arr<-array(c(1:12),c(3,2,2))
+arr
+list<-list("lee","kim",c(1,2,3))
+list
+list[[3]][3]
+a<-list(c(1:5),c(6:10))
+lapply(a,max)
+sapply(a,max)
+unlist(lapply(a,max))
+?data.frame
+no<-c(1,2,3)
+name<-c("hong","lee","kim")
+pay<-c(150,250,300)
+vemp<-data.frame(No=no,Name=name,Pay=pay)
+vemp
+m<-matrix(
+  c(1,"kim",90,2,"hong",100,3,"lee",95),nrow=3,byrow=T)
+mm<-data.frame(m)
+mm
+#연습 끝
+
+
+# stringr 패키지 설치
+install.packages("stringr")
+library(stringr)
+#문자열 추출 정규표현식 활용
+str_extract("홍길동35이순신45유관순25","[1-9]{2}")
+a<-str_extract_all("홍길동35이순신45유관순25","[1-9]{2}")
+b<-unlist(a)
+mean(as.numeric(b))
+# (1)반복수관련 정규 표현식
+string<-"hongkildong105lee1002you25강감찬2005"
+class(str_extract_all(string,"[a-z]{3}"))
+str_extract_all(string,"[a-z]{3,}") # 3개이상은 ,을 써준다.
+str_extract_all(string,"[a-z]{3,5}") # 3개이상 5개이하
+
+# (2) 문자와 숫자 관련 정규표현식
+str_extract_all(string,'hong')
+str_extract_all(string,"[가-힣]{3}")
+str_extract_all(string,"[0-9]{4}")
+
+# (3) 특정문자열 제외 정규표현식
+str_extract_all(string,'[^a-z]') #영문자를 제외한, 
+str_extract_all(string,'[^0-9]') #숫자를 제외한 (꺽새 써주기)
+
+# (4) 한개의 숫자나 단어 관련 정규표현식
+jumin<-'991212-1234583'
+str_extract_all(jumin,"[0-9]{6}-[1-4][0-9]{6}")
+str_extract_all(jumin,"\\d{6}-[1-4]\\d{6}")#\\d는 [0-9]와 같은뜻이다.
+str_extract_all(string,'[a-z]') # \\w는 영문자,한글,숫자 다포함된다.
+str_extract_all(string,'[a-z0-9가-힣]{10,}')
+a<-2
+
+#문자열 연산
+string<-"hongkildong105lee102you25강감찬2005"
+str_length(string)# nchar(string)같음
+str_locate(string,"강감찬")#몇번째에서 몇번째위치에있는지
+regexpr("강감찬",string)
+str_sub(string,26,28)#어떤 변수에, 몇번째부터몇번째까지를 추출해라
+substring(string,26,28)#215번째랑같음의미 r에있는기본
+str_to_upper(string) #전체를 대문자 =~ toupper(string)같음
+str_to_lower(string) #전체를 소문자 =~ tolower(string)같음
+string_rep<-str_replace(string,"hongkildong105","홍길동35,") 
+#219 string안에 문자중 어떤 문자를 어떻게 바꾸고싶다
+string_c<-str_c(string_rep,",키키키")
+#221 str_c(a,b)a라는 문자열뒤에 b라는 내용을 넣고싶다
+string_c
+string_sp<-str_split(string_c,",")
+# 224 str_split(a,b) a라는 문자열을 b를 기준으로 나누고싶다
+string_sp
+# 문자열 분리 및 결합작업
+string_sp<-unlist(str_split(string_c,",")) #리스트를 쪼개준다
+string_sp
+string_sp[1]
+class(string_sp)
+string_join<-paste(string_sp, collapse='.')
+string_join
+number=1:22
+paste("file_chr",number,".txt",sep="")
+paste0("file_chr",number,".txt") 
+# sep을 써서 공백없애기 or paste뒤에0붙혀서 공백없애기
+
+# data frame 객체 처리함수
+df<-data.frame(x=1:5,y=seq(2,10,2),z=c('a','b','c','d','e'))
+#y같은경우 실수일수있어서 num
+df
+str(df)
+dim(df) #데이터의 구조 행, 열 순
+ncol(df)
+nrow(df)
+names(df)#키 값들.
+df$x
+df$y
+df$z
+colnames(df)
+summary(df)
+apply(df[,1:2],2,mean)
+apply(df[,-3],2,mean)
+#subset (중요)
+df1<- subset(df,x<=3)
+df1
+df2<-subset(df,x>=3&y>6)
+df2
