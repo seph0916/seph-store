@@ -1,0 +1,71 @@
+# 데이터 병합
+height<-data.frame(id=c(1,2,3),h=c(180,175,155))
+height
+weight<-data.frame(id=c(1,2,4),
+                   w=c(80,75,49))
+weight
+user<-merge(height,weight,by='id')#by ->뭘 기준으로 병합할건지,교집합으로만
+user
+?merge
+(user2<-merge(height,weight,by="id"))
+
+(user1<-merge(height,weight,by='id',all.x=TRUE))#x=height의자료를 다넣어줘라.
+(user3<-merge(height,weight,by='id',all.y=TRUE))#y=weight의자료를 다넣어줘라.
+user3
+user4<-merge(height,weight,by='id',all=T)#x,y상관없이 다 넣어줘라잉~
+user4
+height<-data.frame(id1=c(1,2,3),h=c(180,175,155))
+height
+weight<-data.frame(id2=c(1,2,4),
+                   w=c(80,75,49))
+height
+weight
+###복습해볼것.
+user1<-merge(height,weight,by.x='id1',by.y='id2',all.x=TRUE)#x=height의자료를 다넣어줘라.
+user1
+user3<-merge(height,weight,by.x='id1',by.y='id2',all.y=TRUE)#y=weight의자료를 다넣어줘라.
+user3
+user4<-merge(height,weight,by.x='id1',by.y='id2',all=T)
+user4
+###
+
+#키보드 입력
+num<-scan()
+num
+?scan
+
+name<-scan(what=character()) #캐릭터형으로 저장하고싶다.
+name
+df<-data.frame()
+df<-edit(df)
+library(regbook)
+# cat 함수 
+x<-10
+y<-20
+print(x)
+print(y)
+cat("x*y=",x*y,sep="")
+cat("x",x,";y=",y,"; x*y=",x*y,sep="")
+# 로컬 파일 읽기
+getwd()
+setwd("/Users/seph/전산통계1/데이터 자료/part1")
+setwd(readclipboard())
+student<-read.table("student.txt")
+names(student)<-c("번호","이름","키","몸무게")
+student<-read.table("student1.txt",header=T,encoding="UTF-8")#다음시간.
+# 웹 문서 읽기
+install.packages("XML")
+install.packages("httr")
+library(XML)
+library(httr)
+ur<-"https://ssti.org/blog/useful-stats-capita-personal-income-state-2010-2015"
+get_url<-GET(ur)
+con<-rawToChar(get_url$content)
+readHTMLTable(con)
+library(stringr)
+str_extract_all(con,"<table")
+str_locate_all(con,"<table")
+str_sub(con,38562,38662)
+html_cont<-readHTMLTable(con)
+html_cont<-as.data.frame(readHTMLTable(con))#데이타프레임
+class(html_cont)
