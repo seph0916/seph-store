@@ -69,3 +69,70 @@ str_sub(con,38562,38662)
 html_cont<-readHTMLTable(con)
 html_cont<-as.data.frame(readHTMLTable(con))#데이타프레임
 class(html_cont)
+# 조건문
+# if 문 only
+score<-85
+result<-"B"
+if(score>80) {result<-"A"}
+score
+result
+cat("당신의 학점은",result,"(",score,")입니다.",sep="")
+# if ~ else if
+score<-40
+if (score>=90) {result<-"A"
+} else if (score>=80) {result<-"B"
+} else if (score>=70) {result<-"C"
+} else {result<-"F"}
+
+
+
+
+# if else문 
+score<- c(100, 85, 70)
+names(score)<-c("james","jane","thomas")
+score
+ifelse(score>=90,"A","B")
+#switch 문
+input<-"name"
+switch(input,id="hong",pw="1234",age=40,name="James")
+
+#which
+no<-1:5
+name<-c("james","jane","thomas","minsu","seph")
+score<-c(70,85,75,90,100)
+exam<-data.frame(학번=no,이름=name,성적=score)
+exam$학번
+exam[which(exam$학번==5),]
+
+# 반복문(for 문)
+
+d<-numeric()
+for(i in 1:10){
+  d[i]<-i*10
+  cat(i,d[i],"\n")
+}
+
+# 홀수값 짝수값 출력
+for (i in 1:10){
+  if (i%%2==0) {print(i)}
+}
+for (i in 1:10){
+  if (i%%2==0) {cat(i," ")}
+}
+for (i in 1:10){
+  if (i%%2==0) {next
+   }else cat(i," ")
+} 
+
+score<-c(50,80) 
+name<-c("james","jane")
+i<-1
+for (s in score){
+  cat(name[i]," 점수 ", s,"\n")
+  i<-i+1
+}
+i<-0
+while (i<10){
+  i<-i+1
+  print(i)
+}
