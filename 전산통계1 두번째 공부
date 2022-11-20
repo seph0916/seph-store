@@ -181,3 +181,132 @@ Sys.setencv(JAVA_HOME=)
 write.table(student,'student_new.txt',row.names=F,quote=F)
 fwrite(stock,"stock.csv")
 write.xlsx(studentex,"studentex_new.xslx",row.names=F) #옵션이 뭐가있는지 기억할것.
+
+
+
+# R 내장함수
+# 행,열 합계 및 평균 구하기
+install.packages("RSADBE")
+library(RSADBE)
+data("Bug_Metrics_Software")
+bug<-Bug_Metrics_Software
+bug
+class(bug)
+mode(bug)
+bug[,,1]
+bug[,,2]
+class(bug[,,1])
+rowSums(bug[,,1]) # 행 별로 합
+rowMeans(bug[,,1])# 행 별로 평균
+apply((bug[,,1]),1,sum) # apply를 이용한 1=행,합
+apply((bug[,,1]),1,mean)# apply를 이용한 1=행,평균
+colSums(bug[,,1]) # 열 별로 합
+colMeans(bug[,,1])# 열 별로 평균
+
+# 난수 생성 및 확률 분포
+# 정규분포
+n<-1000
+r<-rnorm(n,mean=0,sd=1)# rnorm(n,0,1)해도됨
+r#1000개의 난수 만들귀? ㄱㅣ?
+length(r)
+hist(r,col="light blue",main="Histogram of random numbers",breaks=20) # main= 제목 ,col=색
+# 균등 분포 uniform distribution
+n<-1000
+r2<-runif(n,min=0,max=1) # runif(n,0,1) 해도됨.
+r2
+hist(r2,col='pink')
+# 이항 분포 binomial distribution
+?rbinom
+set.seed(123) # seed설정하고 동시에 같이시행하면 순서 고정됨.
+n<-20
+rbinom(n,1,prob=0.5)
+rbinom(n,2,0.5)
+rbinom(n,10,0.5)
+
+# 사용자 정의 함수
+# 매개변수가 없는 함수
+f1<-function(){
+  cat("매개 변수가 없는 함수!!")
+}# 함수를 정의하고 호출하는 방식
+f1()
+
+# 매개변수가 있는 함수
+f2<-function(x,y){
+  cat("x =",x,"y =",y,sep="")
+}
+f2(10,5)
+
+# 리턴값이 있는 함수
+f3<-function(x,y){
+  prod<-x*y
+  return(prod)
+}
+prod<-f3(10,20)
+prod
+
+# 분산과 표준편차
+x<-c(7,5,12,9,15,6)
+var(x)
+sd(x)
+sqrt(var(x))
+
+var_sd<-function(x){
+  var<-sum((x-mean(x))^2)/(length(x)-1)
+  sd<-sqrt(var)
+  cat("var = ",var,"sd = ",sd,sep="")
+  res<-c(var,sd)
+  return(res)
+}
+result<-var_sd(x)
+result[2]
+
+# 구구단 출력 함수
+gugu<-function(i){
+  for(x in i){
+    cat("*******",x,"단출력입니다","\n")
+    for(y in 1:9){
+      cat(x," * ",y,"=",x*y,"\n",sep="")
+    }
+    
+  }
+}
+gugu(3:5)
+
+# 동전 앞/뒤 난수 확률 분포 함수
+coin<-function(n){#n은 시행횟수
+  r<-runif(n,0,1)
+  res<-numeric() # 결과값을 넣을 무작위 아무 누메릭 벡터로만든것.
+  for(i in 1:n){
+    if(r[i]<=0.5) {res[i] <-0
+    }else res[i]<-1
+  }
+  return(res)
+}
+
+coin(14)
+
+coin<-function(n){
+  r<-runif(n,0,1)
+  res<-ifelse(r<=0.5,0,1)
+  return(res)
+}
+coin(10)
+
+#몬테카를로 시뮬레이션
+montaCoin<-function(n){
+  cnt<-0
+  for(i in 1:n){
+    cnt<-cnt+coin(1)
+  }
+  res<-cnt/n
+  return(res)
+}
+montaCoin(10)
+montaCoin(100)
+montaCoin(1000)
+montaCoin(100000)
+cumprod(1:3)
+
+chart_data<-c(305,450,320,460,330,480,380,520)
+names(chart_data)<-c("2014-1","2015-1","2014-2","2015-2","2014-3","2015-3","2014-4","2015-4")
+
