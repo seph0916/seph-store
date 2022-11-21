@@ -310,3 +310,37 @@ cumprod(1:3)
 chart_data<-c(305,450,320,460,330,480,380,520)
 names(chart_data)<-c("2014-1","2015-1","2014-2","2015-2","2014-3","2015-3","2014-4","2015-4")
 
+
+# bar plot 그리기 
+barplot(chart_data,
+        xlim=c(0,600),
+        space=1.5,#간격.
+        horiz=T,# horiz f=> 수직 horiz t => 수평 ,x,y,신경 써주기 .
+        col=rainbow(8),
+        xlab="매출액",
+        ylab="연도별 분기현황",
+        main="2014년도 vs 2015년도 분기별 매출현황 비교",
+        cex.names=0.6) #cex.axis
+par(family="AppleGothic")
+barplot(chart_data)
+
+
+#개별로 vad데쓰에 대해 나눠보기
+data(VADeaths)
+VADeaths
+barplot(VADeaths,beside=T, #beside=F는 누적이고 T는겹쳐있던거 따로 떼기.
+        col=rainbow(5),
+        main="Death Rates in virginia")
+legend(2,70,c('50-54',"55-59","60-64","65-69","70-74"),fill=rainbow(5),cex=0.6)
+#dot 차트
+chart_data
+dotchart(chart_data,col=c("blue","red"),lcolor="black",pch=16:17,
+         lables=names(chart_data),xlab="매출액",main="분기별 판매현황점 차트시각화",cex=1.2)
+#col=("a",b")은 점의 색, lcolor구분선 검정색,pch는 각각의 모양,labels 점레이블 표시
+#pie 차트
+pie(chart_data,col=rainbow(8),cex=0.6,border="green",
+    main="분기별 매출")
+install.packages("plotrix")
+library("plotrix")
+pie3D(chart_data,col=rainbow(8),cex=0.8,explode=0.2,
+      main="분기별 매출")
