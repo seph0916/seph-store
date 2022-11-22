@@ -344,3 +344,71 @@ install.packages("plotrix")
 library("plotrix")
 pie3D(chart_data,col=rainbow(8),cex=0.8,explode=0.2,
       main="분기별 매출")
+
+
+#histogram
+data(iris)
+iris
+head(iris)
+dim(iris)
+summary(iris$Sepal.Length)
+
+iris$Sepal.Length
+hist(iris$Sepal.Length,xlab="Sepal length",col="pink",xlim=c(4,8),breaks=20
+     ,freq=F)
+lines(density(iris$Sepal.Length),col="red")
+d<-density(iris$Sepal.Length)
+x<-seq(4,8,0.1)
+y<-dnorm(x,mean=(iris$Sepal.Length),sd=sd(iris$Sepal.Length))
+curve(dnorm(x,mean=mean(iris$Sepal.Length),sd=sd(iris$Sepal.Length)))
+length(y)
+lines(x,y,col="red")
+dens_width=density(iris$Sepal.Width)
+names(dens_width)
+range(dens_width$x)
+?hist
+#boxplot
+boxplot(VADeaths,range=1,col="light blue") # range=0:최소값과 최대값을 점선으로 연결하는역활
+boxplot(VADeaths,range=0,col="light blue",notch=F)
+abline(h=37,lty=3,col="red")
+cm<-colMeans(VADeaths)
+points(1:4,cm,col="red",pch=16)
+#Scatter plot (산점도)
+set.seed(10)
+price<-runif(10,min=1,max=100)
+?runif
+price
+plot(price,col="blue",pch=16)
+par(new=T)
+plot(1:100,type='l',axes=F,ann=F,col='red') #이걸하기위해par(new=T)안하면 밑에 선만생김
+text(70,80,"대각선 추가",col='blue')
+par(family='AppleGothic')
+#Draw scatter plot for overlapped points
+install.packages("HistData")
+library('HistData')
+data(Galton)
+head(Galton)
+table(Galton$child)
+galtonData<-as.data.frame(table(Galton$child,Galton$parent))
+names(galtonData)<-c("child","parent","freq")
+galtonData
+plot(galtonData$parent,galtonData$child)
+summary(galtonData)
+mode(galtonData$parent)
+plot(as.numeric(galtonData$parent),
+     as.numeric(galtonData$child),col='blue',bg='green',pch=21)#겉은 블루 속은 그린채움
+plot(as.numeric(galtonData$parent),
+     as.numeric(galtonData$child),col='blue',bg='green',pch=21,cex=0.2*galtonData$freq,
+     xlab="parent",ylab="child")
+# cex freq를 사용함으로써 겹치는거에대해 겹칠수록 두꺼워짐(커짐) .
+
+x<-rnorm(1000)
+y<-rnorm(1000)
+xy<-matrix(c(x,y),length(x),2)
+colnames(xy)<-c("x","y")
+xy
+head(xy)
+plot(xy,col="blue",pch=16,cex=2) # 겹치는걸 구분을 할수없음 
+
+densCols(xy) #천개에대한 색깔을 리턴해줌 
+plot(xy,col=densCols(xy),pch=16,cex=2) #사용해보면 겹칠수록 진해지게 변경됨
