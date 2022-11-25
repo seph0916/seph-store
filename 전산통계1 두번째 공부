@@ -412,3 +412,79 @@ plot(xy,col="blue",pch=16,cex=2) # 겹치는걸 구분을 할수없음
 
 densCols(xy) #천개에대한 색깔을 리턴해줌 
 plot(xy,col=densCols(xy),pch=16,cex=2) #사용해보면 겹칠수록 진해지게 변경됨
+
+
+
+#3D Scatter plot
+install.packages("scatterplot3d")
+library(scatterplot3d)
+iris
+table(iris$Species)
+se<-iris[iris$Species=='setosa',] # iris 데이터의 종 부분에서 setosa만 추출하기
+vc<-iris[iris$Species=='versicolor',]
+vi<-iris[iris$Species=='virginica',]
+head(se)
+d3<-scatterplot3d(iris$Petal.Length,iris$Sepal.Length,iris$Sepal.Width)
+d3<-scatterplot3d(iris$Petal.Length,iris$Sepal.Length,iris$Sepal.Width,
+                  type="n") #type="n"쓰면 빈공간
+d3$points3d(se$Petal.Length,se$Sepal.Length,se$Sepal.Width,col="red",
+            pch=16) #빈공간에 자료칠하기
+d3$points3d(vc$Petal.Length,vc$Sepal.Length,vc$Sepal.Width,col="green",pch=18)
+d3$points3d(vi$Petal.Length,vi$Sepal.Length,vi$Sepal.Width,col="blue",pch=20)
+
+# 그룹별 기술 통계량 구하기
+head(iris)
+# apply,lapply,sapply
+
+tapply(iris$Sepal.Length,
+       iris$Species,mean) # tapply(x,y,z) x자료어디부분에서y의그룹별로의z를 구해라
+tapply(iris$Sepal.Length,iris$Species,mean)
+tapply(iris$Sepal.Length,iris$Species,sd)
+install.packages("plyr")
+library(plyr)
+summarise(iris,avg=mean(Sepal.Length),std=sd(Sepal.Length))
+avg_df<-ddply(iris,.(Species),summarize,
+              avg=mean(Sepal.Length),std=sd(Sepal.Length),
+              min=min(Sepal.Length),max=max(Sepal.Length))
+#ddply(x,y,z, z~~~~) x=데이터,y=데이터중 한부분,z=function ,z~~~ function에있는 함수들
+#ex) mean,sd,min,max와 같은느낌 -> 그룹별 기술통계량,if round(mean)하면 반올림
+
+avg_df
+
+# merge
+x<-data.frame(id=c(1,2,3,4,6),height=c(160,171,173,162,180))
+y<-data.frame(id=c(5,4,1,3,2),weight=c(55,73,60,57,80))
+x
+y
+merge(x,y,by="id") #공통으로 있는것만. id 1234겹쳐서 1234만
+?merge
+merge(x,y,by="id",all=T)#하지만 all=T를 써주면 다 포함된다
+merge(x,y,by="id",all.x =T) #x있는애들다~
+merge(x,y,by="id",all.y=T) #y있는애들다~
+#merge는 기본 r에서 제공하는것
+#join 은 plyr패키지에서 제공하는것.
+join(x,y,by="id")
+join(x,y,by="id") #type="left" , 기본형 #left가 먼저 기준임 id기준 x,
+join(x,y,by="id",type="right") #type="rightleft가 먼저 기준임 id기준 x,
+join(x,y,by="id",type="inner") #intersect(x,y) 교집합.
+join(x,y,by="id",type="full") #union(x,y) 전체 다포함
+?join
+
+#merge data by two keys
+x<-data.frame(key1=c(1,1,2,2,3),key2=c('a','b','c','d','e'),
+              val1=c(10,20,30,40,50))
+x
+y<-data.frame(key1=c(3,2,2,1,1),key2=c('e','d','c','b','a'),
+              val2=c(500,400,300,200,100))
+y
+(xy<-merge(x,y,by="key1"))
+xy
+
+(xy2<-merge(x,y,by="key2"))
+xy2
+xy12<-merge(x,y,by=c("key1","key2"))
+xy12
+xy13<-join(x,y,by=c("key1","key2"))
+xy13
+#코드중 메인 키워드 위주공부 ex) seq이런것 ->결과값을쓰기
+#결과를 보여주고 코드를 요구하는것.
