@@ -520,3 +520,68 @@ join(x,y,by="id",type="right") #right join
 join(x,y,by="id",type="inner")# inner join ->교집합느낌
 join(x,y,by="id",type="full")#full join
 
+
+
+#dplyr 
+install.packages("dplyr")
+install.packages("hflights")
+library(dplyr) #공부 열심히하셔야해요 -정원일-.
+library(hflights)
+hflights_df<-tbl_df(hflights)
+hflights #함수들 filter ,arrange,select,mutate,summarize,group_by
+filter(hflights,Month==1&DayofMonth==2)#테이블에대한 것,조건-> 결과로 나옴
+select(hflights,Year,Month,DepTime,ArrTime)#select(a,b,c,d,e,f)a데이터중 b,c,d,e,f,만보여줘
+select(filter(hflights,Month==1|Month==2),Year,Month,DepTime,ArrTime)
+# 800번 필터로 1월2월인데 선택한거만 보여줘
+  hflights%>%
+  filter(Month==1|Month==2)%>%
+  select(Year,Month,DepTime,ArrTime)#800번결과 같게나옴
+
+install.packages("dplyr")
+install.packages("hflights")
+library(dplyr)
+library(hflights)
+str(hflights)#houston flights 데이터
+mode(hflights)
+class(hflights)
+hflights_df<-tbl_df(hflights)
+class(hflights)
+head(hflights_df)
+#조건에 맞는 데이터 필터링
+filter(hflights_df,Month==1)#1월달만 보겠다
+filter(hflights_df,Month==1 &DayofMonth==2)#1월 2일
+filter(hflights_df,Month==1 |Month==2)#month 값 1월 혹은2월
+table(filter(hflights_df,Month==1 |Month==2)$Month) #table1월2월달 갯수
+filter(hflights_df,Month>=7&Month<9)#7월 포함 9월보다 아래
+filter(hflights_df,Month>=7&Month<10)
+colnames(hflights_df)
+#컬럼으로 데이터 정렬
+arrange(hflights_df,Year,Month,DayofMonth)#colnames를 통해서 원하는 열 목록을 추가해주고 실행하면
+#그거대로 정렬이 됨 기본적으로 정렬은 오름차순
+arrange(hflights_df,Year,Month,desc(DayofMonth))#만약내가
+#year,month는오름차순 Dayofmonth내림차순 하고싶으면desc()쓰기
+
+#칼럼으로 데이터 검색
+select(hflights_df,Year,Month,DepTime,ArrTime) #원하는 네임들만 값보여줌
+select(hflights_df,Year:ArrTime)# year~arrtime까지 값보여달라.
+select(hflights_df,-(Year:ArrTime))#year~arrtime까지 빼고 보여주기.
+select(hflights_df,1:3)#colnames 1~3까지
+#데이터 셋에 컬럼 추가
+mutate(hflights_df,gain=ArrDelay-DepDelay,gain_per_hour=gain/(ArrTime/60))
+# gain,gain_per_hour 추가함 근데보고싶다면?
+select(mutate(hflights_df,gain=ArrDelay-DepDelay,
+              gain_per_hour=gain/(ArrTime/60)),gain,gain_per_hour)
+#위와같이 select를 안은다음 보고싶은자료 적기
+
+#요약통계량summarise
+summarise(hflights_df,avgAirTime=mean(ArrTime))
+summarise(hflights_df,avgAirTime=mean(ArrTime,na.rm=T))
+#na.rm=T써야 na 인값제거하고계산함
+summarise(hflights_df,avgAirTime=mean(ArrTime,na.rm=T),
+          arrTimeVar=var(AirTime,na.rm=T))
+#질적 변수 대상 그룹화
+group_by(hflights_df,Month) #그룹이 12개로 나눠짐
+#파이프 사용법
+hflights_df%>%group_by(Month)%>%summarise(avgAirTime=mean(ArrTime,na.rm=T))
+#hflights데이터에서 month를 그룹으로 나눈뒤 avgairtime의 평균을 구해라.(820번)
+
