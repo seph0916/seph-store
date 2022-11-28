@@ -585,3 +585,46 @@ group_by(hflights_df,Month) #그룹이 12개로 나눠짐
 hflights_df%>%group_by(Month)%>%summarise(avgAirTime=mean(ArrTime,na.rm=T))
 #hflights데이터에서 month를 그룹으로 나눈뒤 avgairtime의 평균을 구해라.(820번)
 
+
+
+#reshape2 패키지
+install.packages("reshape2")
+library(reshape2)
+
+#Long format을 wide format으로 변경
+setwd('/Users/seph/전산통계1/데이터 자료/part2')
+data<-read.csv("data.csv")
+head(data)
+dim(data)
+#dcast(data.frame,행구성변수~열구성변수,value.var="측정변수",fun)
+wide<-dcast(data,Customer_ID~Date,
+            value.var="Buy",sum)#id기준으로  data 들 buy 더해라
+wide2<-dcast(data,Customer_ID~Date,value.var="Buy",length) #몇번
+
+#wide 포맷을 long 포맷으로변경
+#melt(data.frame,id="기준column')
+long<-melt(wide,id="Customer_ID") #커스텀아이디를 첫번쨰 기준으로두겠다+wide
+names(long)[-1]=c("Date","buy") #첫번쨰는 그대로두고 그담 두개 이름바꾸기
+long
+#melt 활용
+data("smiths")
+smiths
+long<-melt(smiths,id=c("subject","time"))#특정섭젝과 타임을 녹여내는것
+long
+
+#long 포맷에서 다시 wide 포맷으로 변경하려면
+dcast(long,subject+time~variable,value.var = "value")
+
+#3차원 형식으로 변경
+data('airquality')
+head(airquality)
+str(airquality)
+ddd_melt<-melt(airquality,id=c("Ozone","Wind"))
+ddd_melt
+
+ddcast<-acast(ddd_melt,Wind~Ozone~variable)
+air_melt<-melt(airquality,id=c("Month","Day"))
+air_melt
+acast<-acast(air_melt,Day~Month~variable) #따로따로 3차원으로 분류됨 
+#acast(data,행구성변수~열구성변수~측정변수) 순
+
