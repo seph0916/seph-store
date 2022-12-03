@@ -628,3 +628,75 @@ air_melt
 acast<-acast(air_melt,Day~Month~variable) #따로따로 3차원으로 분류됨 
 #acast(data,행구성변수~열구성변수~측정변수) 순
 
+
+
+
+#21년 전산통계 중간고사 대비
+#1번
+library(httr)
+library(data.table)
+install.packages("data.table")
+install.packages("httr")
+d1<-read.csv("https://canvas.ssu.ac.kr/courses/10411/files/244340/download?verifier=MxF4lhRP10gxLaPk6FPZTKtE3VA0ezVKefQLPtL1")
+d2<-fread("https://canvas.ssu.ac.kr/courses/10411/files/244340/download?verifier=MxF4lhRP10gxLaPk6FPZTKtE3VA0ezVKefQLPtL1")
+head(d1)
+head(d2)
+
+#2번 -를 ~ 로 바꾸시오
+install.packages("stringr")
+library(stringr)
+d1$period<-str_replace(a$period,"-","~")
+head(d1)
+#3번 1995~99-> 1995~1999로 바꾸시오
+?paste
+d1
+iff<-ifelse(str_sub(d1$period,6,7)>=10,"19","20")
+d1$period<-paste0(str_sub(d1$period,1,5),iff,str_sub(d1$period,6,7))
+head(d1)
+
+#4번 결측치 합 하기
+func<-function(d1){
+  sum(is.na(d1))
+}
+func
+
+aa1<-apply(d1,2,function(d1){sum(is.na(d1))})
+#4번 u5mr에있는 결측치행 제거하기
+d1<-d1%>% filter(!is.na(d1$u5mr))
+d1$gdppc
+d1
+#5번 히스토그램 그리고 밀집그래프까지
+hist(d1$u5mr,col="light blue",freq=F,breaks=20)
+lines(density(d1$u5mr),col="red")
+
+# 6번
+install.packages("dplyr")
+library(dplyr)
+d1$gdppc
+#tapply
+tapply(d1$gdppc,d1$cname,mean,na.rm=T)
+#ddplyr 이용하여 cname별 평균
+#파이프 써보기
+group_by(d1,cname)
+avgg<-ddply(d1,.(cname),summarise,avg=mean(d1$gdppc),na.rm=T)
+d1%>%group_by(cname)%>%summarise(avg=mean(gdppc,na.rm=T))
+d1%>%group_by(cname)%>%summarise(avg=mean(gdppc,na.rm=T))
+#6번 평균 다른방법
+library(dplyr)
+d1$gdppc
+d1 <- filter(d1,!is.na(d1$gdppc))
+colSums(is.na(d1))
+head(d1$gdppc)
+?dplyr
+d1_gro<-group_by(d1, cname)
+gdppc_came_avg <- summarise(d1_gro, avg = mean(gdppc))
+gdppc_came_avg
+d1
+#7번
+d1$gdppc <- ifelse(
+is.na(d1$gdppc),
+gdppc_came_avg,
+d1$gdppc
+)
+d1$gdppc
+
