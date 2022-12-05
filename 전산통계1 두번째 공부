@@ -700,3 +700,77 @@ d1$gdppc
 )
 d1$gdppc
 
+
+# (1) 더미형식의 파일 변수 생성 
+
+setwd("/Users/seph/전산통계1/데이터 자료/part2")
+user_data<-read.csv("user_data.csv",encoding="UTF-8",fileEncoding = "CP949")
+head(user_data)
+table(user_data$house_type)
+user_data$house_type2<-ifelse(user_data$house_type==1|
+                                user_data$house_type==2,0,1)
+head(user_data)
+#(2) 1:1 관계로 파생변수 생성
+pay_data<-read.csv("pay_data.csv",encoding="UTF-8",fileEncoding = "CP949")
+head(pay_data)
+library(reshape2)
+product_price<-dcast(pay_data,user_id~product_type,value.var = "price",sum,na.rm=T)
+head(product_price)
+names(product_price)[-1]=c("식료품(1)","생필품(2)","의류(3)","잡화(4)","기타(5)")
+head(product_price)
+pay_price<-dcast(pay_data,user_id~pay_method,length,value.var = "price")
+head(pay_price)
+#(3) 파생변수 합치기
+library(plyr)
+head(user_data)
+head(product_price)
+user_pay_data<-join(user_data,product_price,by="user_id")
+head(user_pay_data)
+user_pay_data<-join(user_pay_data,pay_price,by="user_id")
+head(user_pay_data)
+user_pay_data[c(1:10),c(1,7:15)]
+
+#(4) 변형된 데이터 저장
+write.csv(user_pay_data,"CleanData.csv",quote=F,row.names = F)
+data<-read.csv("CleanData.csv")
+
+#결측치를 포함 하기위한 방법
+
+setwd("/Users/seph/전산통계1/데이터 자료/part2")
+dataset<-read.csv("dataset.csv")
+head(dataset)
+dim(dataset)
+a<-dataset$resident
+dataset$resident<-as.factor(dataset$resident)#범주형 변수일때 쓰기위해서 바꿔버리기 위해서 as.factor
+table(dataset$resident,exclude = NULL)#na는 na끼리 따로 갯수 확인 
+summary(dataset$resident) #질적변수
+summary(a) #양적변수
+#summary(a) 와 차이점 알기,
+#서머리할때 양적변수 질적변수의 서머리 다르다
+#질적변수는 카테고리로 나눠저서 개수 등나옴 양적변수는 중앙값 최소값최대값 등등나옴
+summary(a)
+#결측치를 제거 
+price2<-na.omit(dataset$price)#price에 있는 na를 제거
+summary(price2)
+summary(dataset$price)
+length(dataset$price)#결측치 제거전
+length(price2)#결측치 제거후
+dataset.new<-na.omit(dataset) #na가 하나라도 있는 행을 제거해버림
+dim(dataset)
+dim(dataset.new)
+sum(is.na(dataset))
+sum(is.na(dataset.new))
+#na를 0이나 평균으로 대체시키는 방법
+x<-dataset$price
+head(dataset)
+dataset$price2<-ifelse(!is.na(x),x,0) #dataset에 새로운 컬럼 추가 na가아니면 ->x,맞으면0
+dataset$price3<-ifelse(!is.na(x),x,round(mean(x,na.rm=T),2))#na아니면 x 맞으면 평균으로 대체,round 2 2자리까지
+round(mean(x,na.rm=T),2)
+dataset
+head(dataset)
+sum(is.na(dataset$price2))
+
+#저장하기()
+write.csv(dataset,"dataset_new.csv",quote=F,row.names=F)#따옴표, 로우네임 제거해주는것
+getwd()
+
